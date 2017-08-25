@@ -88,7 +88,7 @@ public final class OpenScienceFrameworkUser {
         return username;
     }
 
-    public String getEPPN() {
+    public String getEppn() {
         return eppn;
     }
 
