@@ -35,3 +35,6 @@ install:
   - mvn install -P nocheck
 script:
   - mvn test -P !nocheck
+branches:
+  except:
+    - /^NII_/
