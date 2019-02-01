@@ -64,7 +64,7 @@ public class OpenScienceFrameworkDaoImpl implements OpenScienceFrameworkDao {
      * @param eppn the ePPN
      * @return OpenScienceFrameworkUser or null
      */
-    private OpenScienceFrameworkUser findOneUserByEPPN(final String eppn) {
+    private OpenScienceFrameworkUser findOneUserByEppn(final String eppn) {
         try {
             final TypedQuery<OpenScienceFrameworkUser> query = entityManager.createQuery(
                     "select u from OpenScienceFrameworkUser u where u.eppn = :eppn",
@@ -120,21 +120,21 @@ public class OpenScienceFrameworkDaoImpl implements OpenScienceFrameworkDao {
     public OpenScienceFrameworkUser findOneUserByEmail(final String address) {
 
         // check ePPN first
-        OpenScienceFrameworkUser user = findOneUserByEPPN(address);
+        OpenScienceFrameworkUser user = findOneUserByEppn(address);
         if (user != null) {
             return user;
         }
 
-	final String address_lowercase = address.toLowerCase();
+        final String addressLowerCase = address.toLowerCase();
 
         // check username (primary email)
-        user = findOneUserByUsername(address_lowercase);
+        user = findOneUserByUsername(addressLowerCase);
         if (user != null) {
             return user;
         }
 
         // check osf email
-        final OpenScienceFrameworkEmail email = findOneEmailByAddress(address_lowercase);
+        final OpenScienceFrameworkEmail email = findOneEmailByAddress(addressLowerCase);
         return email != null ? email.getUser() : null;
     }
 
