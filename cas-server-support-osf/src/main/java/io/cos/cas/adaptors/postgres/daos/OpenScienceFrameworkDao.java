@@ -1,27 +1,24 @@
 /*
- * Licensed to Apereo under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Apereo licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
+ * Copyright (c) 2016. Center for Open Science
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package io.cos.cas.adaptors.postgres.daos;
 
 import io.cos.cas.adaptors.postgres.models.OpenScienceFrameworkApiOauth2Application;
 import io.cos.cas.adaptors.postgres.models.OpenScienceFrameworkApiOauth2PersonalAccessToken;
 import io.cos.cas.adaptors.postgres.models.OpenScienceFrameworkApiOauth2Scope;
+import io.cos.cas.adaptors.postgres.models.OpenScienceFrameworkApiOauth2TokenScope;
 import io.cos.cas.adaptors.postgres.models.OpenScienceFrameworkGuid;
 import io.cos.cas.adaptors.postgres.models.OpenScienceFrameworkInstitution;
 import io.cos.cas.adaptors.postgres.models.OpenScienceFrameworkTimeBasedOneTimePassword;
@@ -77,7 +74,15 @@ public interface OpenScienceFrameworkDao {
     OpenScienceFrameworkApiOauth2Scope findOneScopeByName(final String name);
 
     /**
-     * Find one personal access token by token id.
+     * Find one scope by the scope's primary key id.
+     *
+     * @param scopePk the scope's primary key
+     * @return OpenScienceFrameworkApiOauth2Scope or null
+     */
+    OpenScienceFrameworkApiOauth2Scope findOneScopeByScopePk(final Integer scopePk);
+
+    /**
+     * Find one personal access token by token id (i.e the column token_id, not the primary key id).
      *
      * @param tokenId the token id
      * @return OpenScienceFrameworkApiOauth2PersonalAccessToken or null
@@ -92,10 +97,18 @@ public interface OpenScienceFrameworkDao {
     List<OpenScienceFrameworkApiOauth2Application> findOauthApplications();
 
     /**
-     * Find the GUID object asscociated with a User.
+     * Find the guid object associated with the user.
      *
      * @param user the user
      * @return the GUID object
      */
     OpenScienceFrameworkGuid findGuidByUser(final OpenScienceFrameworkUser user);
+
+    /**
+     * Fine all the token-scope relationships by the token's primary key.
+     *
+     * @param tokenPk the token's primary key
+     * @return OpenScienceFrameworkApiOauth2TokenScope List or null
+     */
+    List<OpenScienceFrameworkApiOauth2TokenScope> findAllTokenScopesByTokenPk(final Integer tokenPk);
 }

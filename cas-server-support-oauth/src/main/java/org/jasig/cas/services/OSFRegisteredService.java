@@ -1,20 +1,17 @@
 /*
- * Licensed to Apereo under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Apereo licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
+ * Copyright (c) 2017. Center for Open Science
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.jasig.cas.services;
 
@@ -24,9 +21,11 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
- * Mutable registered service that uses String equality check for
- * service matching. Matching is case insensitive.
+ * OSF registered service.
  *
+ * Mutable registered service that uses case-insensitive String equality check for service matching.
+ *
+ * @author Michael Haselton
  * @author Longze Chen
  * @since 4.1.5
  */
@@ -34,6 +33,7 @@ import javax.persistence.Entity;
 @DiscriminatorValue("osf")
 public class OSFRegisteredService extends AbstractRegisteredService {
 
+    /** Unique id for serialization. */
     private static final long serialVersionUID = 2028857446020394771L;
 
     private transient String servicePattern;

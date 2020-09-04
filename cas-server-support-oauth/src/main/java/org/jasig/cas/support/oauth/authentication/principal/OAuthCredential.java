@@ -1,20 +1,17 @@
 /*
- * Licensed to Apereo under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Apereo licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
+ * Copyright (c) 2015. Center for Open Science
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.jasig.cas.support.oauth.authentication.principal;
 
@@ -25,16 +22,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * OAuth Credential.
+ * OAuth credential.
+ *
+ * As an extension of the built-in credential {@link Credential}, this class is used to generate the ticket granting
+ * ticket during the process of granting three types of OAuth tokens: ONLINE access token, OFFLINE refresh token and
+ * PERSONAL access token.
+ *
+ * In addition, since the OAuth credential rely on the primary CAS authentication, this class wraps the existing
+ * authorization so that we can apply specific expiration policies based on the access type {@link #accessType}. For
+ * more information, see {@link org.jasig.cas.support.oauth.ticket.support.OAuthDelegatingExpirationPolicy}.
  *
  * @author Michael Haselton
- * @since 4.1.0
+ * @author Longze Chen
+ * @since 4.1.5
  */
 public final class OAuthCredential implements Credential {
 
     /** Authentication attribute name for access type. **/
     public static final String AUTHENTICATION_ATTRIBUTE_ACCESS_TYPE = "oAuthAccessType";
 
+    /** Unique id for serialization. */
     private static final long serialVersionUID = -98723987239832729L;
 
     private final String id;
@@ -44,21 +51,17 @@ public final class OAuthCredential implements Credential {
     private final TokenType accessType;
 
     /**
-     * Instantiates a new OAuth credential.
-     * Since oauth credentials rely on the primary authentication we wrapping the
-     * existing authorization so we can apply specific expiration policies
+     * Instantiates a new {@link OAuthCredential}.
      *
      * @param id the user id
      * @param accessType the access type
      */
     public OAuthCredential(final String id, final TokenType accessType) {
-        this(id, new HashMap<String, Object>(), accessType);
+        this(id, new HashMap<>(), accessType);
     }
 
     /**
-     * Instantiates a new OAuth credential.
-     * Since oauth credentials rely on the primary authentication we wrapping the
-     * existing authorization so we can apply specific expiration policies
+     * Instantiates a new {@link OAuthCredential}.
      *
      * @param id the user id
      * @param attributes the attributes
@@ -79,7 +82,7 @@ public final class OAuthCredential implements Credential {
         return this.id;
     }
 
-    public TokenType getAccessType() {
+    TokenType getAccessType() {
         return this.accessType;
     }
 

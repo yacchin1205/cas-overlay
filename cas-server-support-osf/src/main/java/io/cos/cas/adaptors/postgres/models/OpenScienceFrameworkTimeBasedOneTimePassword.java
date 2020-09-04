@@ -1,22 +1,18 @@
 /*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
+ * Copyright (c) 2016. Center for Open Science
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package io.cos.cas.adaptors.postgres.models;
 
 import org.apache.commons.codec.binary.Base32;
@@ -27,14 +23,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import javax.xml.bind.DatatypeConverter;
+
+import java.util.Date;
 
 /**
  * The Open Science Framework Two Factor User Settings.
  *
  * @author Michael Haselton
  * @author Longze Chen
- * @since 4.1.0
+ * @since 19.3.0
  */
 @Entity
 @Table(name = "addons_twofactor_usersettings")
@@ -54,8 +55,9 @@ public class OpenScienceFrameworkTimeBasedOneTimePassword {
     @Column(name = "is_confirmed", nullable = false)
     private Boolean confirmed;
 
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "deleted")
+    private Date deleted;
 
     /** Default Constructor. */
     public OpenScienceFrameworkTimeBasedOneTimePassword() {}
@@ -73,7 +75,7 @@ public class OpenScienceFrameworkTimeBasedOneTimePassword {
     }
 
     public Boolean isDeleted() {
-        return deleted;
+        return deleted != null;
     }
 
     /**

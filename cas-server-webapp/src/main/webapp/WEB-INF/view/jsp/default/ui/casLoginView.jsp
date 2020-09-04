@@ -1,5 +1,7 @@
 <%--
 
+    Copyright (c) 2015. Center for Open Science
+
     Licensed to Apereo under one or more contributor license
     agreements. See the NOTICE file distributed with this work
     for additional information regarding copyright ownership.
@@ -64,7 +66,7 @@
             <c:if test="${not empty registeredService.id && (
                 registeredService.id == 203948234207230 || registeredService.id == 203948234207231 ||
                 registeredService.id == 203948234207232 || registeredService.id == 203948234207340 ||
-                (registeredService.id >= 203948234207240 && registeredService.id <= 203948234207271)
+                (registeredService.id >= 203948234207240 && registeredService.id <= 203948234207273)
             )}">
                 <section class="row">
                     <a id="alt-login-orcid" class="btn-alt-login" href="${OrcidClientUrl}">
@@ -78,8 +80,9 @@
         <%-- Institution Login --%>
         <spring:eval var="institutionLoginUrl" expression="@casProperties.getProperty('cas.institution.login.url')"/>
         <c:set var="serviceParam" value="&service=${osfLoginContext.isServiceUrl() ? osfLoginContext.getServiceUrl() : ''}"/>
+        <c:set var="institutionIdParam" value="&institutionId=${osfLoginContext.getInstitutionId()}"/>
         <section class="row">
-            <a id="alt-login-inst" class="btn-alt-login" href="${institutionLoginUrl}${serviceParam}">
+            <a id="alt-login-inst" class="btn-alt-login" href="${institutionLoginUrl}${serviceParam}${institutionIdParam}">
                 <img class="osf-alt-logo" src="../images/institution-logo.png">
                 <span class="label-login"><spring:message code="screen.welcome.button.login.institution"/></span>
             </a>
@@ -120,7 +123,7 @@
             <input type="checkbox" name="rememberMe" id="rememberMe" value="true" checked tabindex="5"/>
             <label for="rememberMe"><spring:message code="screen.rememberme.checkbox.title"/></label>
             <spring:eval var="forgotPasswordUrl" expression="@casProperties.getProperty('osf.forgotPassword.url')"/>
-            <a id="forgot-password" class='need-help' href="${forgotPasswordUrl}" title="<spring:message code="logo.title" />"><spring:message code="screen.general.link.forgotPassword"/></a>
+            <a id="forgot-password" class='need-help' href="${forgotPasswordUrl}"><spring:message code="screen.general.link.forgotPassword"/></a>
         </section>
 
     </form:form>

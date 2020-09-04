@@ -1,25 +1,22 @@
 /*
- * Licensed to Jasig under one or more contributor license
- * agreements. See the NOTICE file distributed with this work
- * for additional information regarding copyright ownership.
- * Jasig licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License.  You may obtain a
- * copy of the License at the following location:
+ * Copyright (c) 2016. Center for Open Science
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package io.cos.cas.web.flow;
 
 import io.cos.cas.adaptors.postgres.handlers.OpenScienceFrameworkInstitutionHandler;
+
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
@@ -36,7 +33,7 @@ import java.util.Map;
  * Open Science Framework Institution Login Handler.
  *
  * @author Longze Chen
- * @since 4.1.5
+ * @since 19.3.0
  */
 public class OpenScienceFrameworkInstitutionLoginHandler {
 
@@ -72,10 +69,33 @@ public class OpenScienceFrameworkInstitutionLoginHandler {
             throw new AssertionError("UTF-8 is unknown");
         }
 
-        final Map<String, String> institutions = this.institutionHandler.getInstitutionLoginUrls(target);
-        institutions.put("", " -- select an institution -- ");
-        final Map<String, String> sortedInstitutions = sortByValue(institutions);
-        context.getFlowScope().put("institutions", sortedInstitutions);
+        // Retrieve institution ID from flow context instead of URL params
+        String institutionId = null;
+        final String loginContext = (String) context.getFlowScope().get("jsonLoginContext");
+        final OpenScienceFrameworkLoginHandler.OpenScienceFrameworkLoginContext osfLoginContext
+                = OpenScienceFrameworkLoginHandler.OpenScienceFrameworkLoginContext.fromJson(loginContext);
+        if (osfLoginContext != null) {
+            institutionId = osfLoginContext.getInstitutionId();
+            // Set institution ID to null if not found
+            if (!this.institutionHandler.validateInstitutionForLogin(institutionId)) {
+                osfLoginContext.setInstitutionId(null);
+                context.getFlowScope().put("jsonLoginContext", osfLoginContext.toJson());
+                institutionId = null;
+            }
+        }
+
+        final Map<String, String> institutionLoginUrlMap
+                = this.institutionHandler.getInstitutionLoginUrlMap(target, institutionId);
+        final Map<String, String> institutionLoginUrlMapSorted;
+        if (institutionId != null) {
+            // One institution (a.k.a. auto selecting the preferred institution)
+            institutionLoginUrlMapSorted = institutionLoginUrlMap;
+        } else {
+            // All institutions with pending selection if auto selection is disabled or turns out to be invalid
+            institutionLoginUrlMap.put("", " -- select an institution -- ");
+            institutionLoginUrlMapSorted = sortByValue(institutionLoginUrlMap);
+        }
+        context.getFlowScope().put("institutions", institutionLoginUrlMapSorted);
         return new Event(this, "success");
     }
 

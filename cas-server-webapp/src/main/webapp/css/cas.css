@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2015. Center for Open Science
+ *
  * Licensed to Apereo under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -450,6 +452,10 @@ footer a:link, footer a:visited {
     padding: 2px 0 2px 5px;
     height: 20px;
     width: 100%;
+}
+
+#inst-login .need-help {
+    font-size: 15px;
 }
 
 #inst-login .btn-submit input[type=button],

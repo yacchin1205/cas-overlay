@@ -1,21 +1,18 @@
 <%--
 
-    Licensed to Apereo under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Apereo licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License.  You may obtain a
-    copy of the License at the following location:
+    Copyright (c) 2016. Center for Open Science
 
-      http://www.apache.org/licenses/LICENSE-2.0
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
 --%>
 
@@ -25,6 +22,8 @@
 
 <div id="inst-login">
 
+    <c:set var="serviceParam" value="&service=${osfLoginContext.isServiceUrl() ? osfLoginContext.getServiceUrl() : ''}"/>
+
     <script>resizeCasContent();</script>
 
     <section class="row">
@@ -33,16 +32,38 @@
         </div>
     </section><br/>
 
-    <section class="row">
-        <div class="select">
-            <label for="select-institution"><spring:message code="screen.institution.login.select" /></label>
-        </div>
-    </section>
-    <section class="row">
-        <div class="select">
-            <form:select class="select" id="institution-form-select" name="select-institution" path="institutions" items="${institutions}" onchange="checkSelect()" autofocus="autofocus"/>
-        </div>
-    </section><br/>
+    <c:choose>
+        <c:when test="${osfLoginContext.getInstitutionId() != null}">
+            <section class="row">
+                <div class="select">
+                    <label for="select-institution"><spring:message code="screen.institution.login.select.auto" /></label>
+                </div>
+            </section>
+            <section class="row">
+                <div class="select">
+                    <form:select class="select" id="institution-form-select" name="select-institution" path="institutions" items="${institutions}" onchange="checkSelect()" autofocus="autofocus" disabled="true"/>
+                </div>
+            </section>
+            <spring:eval var="defaultInstitutionLoginURL" expression="@casProperties.getProperty('cas.institution.login.url')"/>
+            <a id="not-your-institution" class='need-help' href="${defaultInstitutionLoginURL}${serviceParam}"><spring:message code="screen.institution.login.select.all"/></a>
+            <br/>
+            <c:set var="institutionIdParam" value="&institutionId=${osfLoginContext.getInstitutionId()}"/>
+        </c:when>
+        <c:otherwise>
+            <section class="row">
+                <div class="select">
+                    <label for="select-institution"><spring:message code="screen.institution.login.select" /></label>
+                </div>
+            </section>
+            <section class="row">
+                <div class="select">
+                    <form:select class="select" id="institution-form-select" name="select-institution" path="institutions" items="${institutions}" onchange="checkSelect()" autofocus="autofocus" disabled="false"/>
+                </div>
+            </section>
+            <c:set var="institutionIdParam" value="&institutionId="/>
+        </c:otherwise>
+    </c:choose>
+    <br/>
 
     <section class="row">
         <div class="inst-message">
@@ -67,9 +88,8 @@
     <%-- OSF Username and Password Login --%>
     <hr/><br/>
     <spring:eval var="osfLoginUrl" expression="@casProperties.getProperty('cas.osf.login.url')"/>
-    <c:set var="serviceParam" value="&service=${osfLoginContext.isServiceUrl() ? osfLoginContext.getServiceUrl() : ''}"/>
     <section class="row">
-        <a id="alt-login-osf" class="btn-alt-login" href="${osfLoginUrl}${serviceParam}">
+        <a id="alt-login-osf" class="btn-alt-login" href="${osfLoginUrl}${serviceParam}${institutionIdParam}">
             <img class="osf-alt-logo" src="../images/rdm_logo-1.png">
             <span class="label-login"><spring:message code="screen.institution.login.osf"/></span>
         </a>
@@ -86,10 +106,12 @@
             if(institutionLoginUrl == null || institutionLoginUrl === "") {
                 selectErrorMessage.style.display = "inline";
                 return;
-            } else if (institutionLoginUrl === "callutheran") {
+            } else if (institutionLoginUrl === "callutheran2") {
                 institutionLoginUrl = "${callutheranUrl}";
             } else if (institutionLoginUrl === "okstate") {
                 institutionLoginUrl = "${okstateUrl}";
+            } else if (institutionLoginUrl === "cord") {
+                institutionLoginUrl = "${cordUrl}"
             }
 
             var consentCheckbox = document.getElementById('consent-checkbox');
