@@ -17,7 +17,7 @@ FROM jetty:9.3-jre8-alpine AS dist
 
 USER root
 
-COPY ./etc/cas.properties ./etc/institutions-auth.xsl ./etc/log4j2.xml /etc/cas/
+COPY ./etc/cas.properties ./etc/institutions-auth.xsl /etc/cas/
 COPY ./etc/services /etc/cas/services
 RUN mkdir -p /home/jetty \
     && chown -R jetty:jetty /home/jetty /etc/cas
@@ -30,7 +30,6 @@ RUN java -jar "$JETTY_HOME/start.jar" --add-to-startd=http-forwarded \
     && java -jar "$JETTY_HOME/start.jar" --add-to-startd=rewrite \
     && sed -i \
         -e "s|^osf.api.institutions.auth.xslLocation=.*|osf.api.institutions.auth.xslLocation=file:/etc/cas/institutions-auth.xsl|" \
-        -e "s|^log4j.config.location=.*|log4j.config.location=file:/etc/cas/log4j2.xml|" \
         -e "s|^service.registry.config.location=.*|service.registry.config.location=file:/etc/cas/services|" \
         /etc/cas/cas.properties
 
@@ -88,7 +87,7 @@ RUN echo \
             </Call> \
         </Configure>' >> /var/lib/jetty/webapps/cas.xml
 
-CMD ["java","-jar","/usr/local/jetty/start.jar","-Dcas.properties.filepath=file:/etc/cas/cas.properties","-Dlog4j.configurationFile=file:/etc/cas/log4j2.xml"]
+CMD ["java","-jar","/usr/local/jetty/start.jar","-Dcas.properties.filepath=file:/etc/cas/cas.properties"]
 
 ### Dev
 FROM app AS dev

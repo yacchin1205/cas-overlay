@@ -27,10 +27,7 @@
          version="3.0">
     <display-name>Central Authentication System (CAS) 4.1.5</display-name>
 
-    <context-param>
-        <param-name>isLog4jAutoInitializationDisabled</param-name>
-        <param-value>true</param-value>
-    </context-param>
+    <!-- Log4j auto-initialization removed since Log4j dependencies have been removed -->
 
     <context-param>
         <param-name>contextConfigLocation</param-name>

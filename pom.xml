@@ -92,12 +92,7 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Sentry -->
-        <dependency>
-            <groupId>com.getsentry.raven</groupId>
-            <artifactId>raven-log4j2</artifactId>
-            <scope>compile</scope>
-        </dependency>
+        <!-- Sentry removed (was using log4j2) -->
 
         <!-- Inspektr Auditing -->
         <dependency>
@@ -262,12 +257,7 @@
                 <version>${postgresql.version}</version>
             </dependency>
 
-            <!-- Sentry -->
-            <dependency>
-                <groupId>com.getsentry.raven</groupId>
-                <artifactId>raven-log4j2</artifactId>
-                <version>${raven.log4j2.version}</version>
-            </dependency>
+            <!-- Sentry removed (was using log4j2) -->
 
             <!-- Inspektr Auditing -->
             <dependency>
@@ -343,36 +333,7 @@
                 <classifier>spring</classifier>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>${log4j2.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>${log4j2.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j-impl</artifactId>
-                <version>${log4j2.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-jcl</artifactId>
-                <version>${log4j2.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-web</artifactId>
-                <version>${log4j2.version}</version>
-                <scope>runtime</scope>
-            </dependency>
+            <!-- Log4j dependencies removed -->
         </dependencies>
     </dependencyManagement>
 
@@ -702,7 +663,6 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <log4j.configuration>file:noLogs.xml</log4j.configuration>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -730,7 +690,6 @@
         <postgresql.version>42.1.4</postgresql.version>
         <jstl.version>1.2</jstl.version>
         <servlet.api.version>3.0.1</servlet.api.version>
-        <raven.log4j2.version>7.8.2</raven.log4j2.version>
         <checkstyle.version>6.7</checkstyle.version>
         <apache.httpclient.version>4.4.1</apache.httpclient.version>
         <nimbus.jose.version>4.10</nimbus.jose.version>
@@ -739,7 +698,6 @@
         <crash.version>1.3.2</crash.version>
         <pac4j.version>1.7.1</pac4j.version>
         <google.gson.version>2.7</google.gson.version>
-        <log4j2.version>2.17.1</log4j2.version>
 
         <!-- Plugin Versions -->
         <maven-buildnumber-plugin-version>1.3</maven-buildnumber-plugin-version>
